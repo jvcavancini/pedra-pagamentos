@@ -1,8 +1,23 @@
-version: "3.9"
+version: '2.1'
 services:
-  web:
+  postgres:
+    restart: always
+    image: postgres:10
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=jvca1996
+      - POSTGRES_DB=last-mile
+    volumes:
+      - ./postgres-data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  app:
+    restart: always
     build: .
     ports:
-      - "8000:5000"
-  redis:
-    image: "redis:alpine"
+      - 5000:5000
+    volumes: 
+      - .:/app
+    depends_on:
+      - postgres
+    entrypoint: ["python", "manage.py","runserver"]

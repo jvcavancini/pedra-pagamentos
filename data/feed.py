@@ -1,11 +1,12 @@
 #script to feed the api with all csv data from this folder
 import csv, json, requests, psycopg2
+import unicodedata as ud
 
 DB_HOST="localhost"
 DB_NAME="last-mile"
 DB_USER="postgres"
 DB_PASS="jvca1996"
-CSV_NAME="desafio_mini.csv"
+CSV_NAME="desafio_joao_virgilio.csv"
 
 def csv2listdict(filename='data.csv'):
     with open(filename, "r") as f:
@@ -15,6 +16,7 @@ def csv2listdict(filename='data.csv'):
 
 def dictdate(csv_dict):
     csv_copy=dict(csv_dict)
+    csv_copy["angel"]=ud.normalize('NFKD',csv_dict["angel"]).encode('ascii','ignore').decode('utf8')
     csv_copy["polo_uf"]=csv_dict["polo"][:2]
     csv_copy["polo_cidade"]=csv_dict["polo"][5:]
     csv_copy["data_limite"]=csv_dict["data_limite"][6:10]+"-"+csv_dict["data_limite"][3:5]+"-"+csv_dict["data_limite"][0:2]
