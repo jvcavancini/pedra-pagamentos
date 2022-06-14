@@ -1,8 +1,11 @@
-FROM python:3.6
-RUN apt-get update
-RUN mkdir /app
-WORKDIR /app
-COPY . /app
-RUN pip install --no-cache-dir -r requirements.txt
-ENV FLASK_ENV="docker"
-EXPOSE 5000
+FROM python:3.6-slim-buster
+
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+COPY . .
+
+EXPOSE 80
+
+CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
